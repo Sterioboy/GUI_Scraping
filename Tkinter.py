@@ -23,10 +23,10 @@ root.title("Quotes-20000")
 random_quote = random.choice(res)
 text = random_quote[0], random_quote[1]
 myLabel = Label(root, text=text)
-myLabel.pack()
+myLabel.grid(row=0, column=0)
 #
-users_answer = Entry(root)
-users_answer.pack()
+users_answer = Entry(root, width=35, borderwidth=5)
+users_answer.grid(row=1, column=0, columnspan=4, padx=10, pady=10)
 users_answer.insert(0, "Who said this")
 #
 def info():
@@ -52,19 +52,23 @@ def hint1():
     myLabel2.pack()
 
 def hint2():
-    hint2 = f"I've almost completed the name for you :) $ {random_quote[1][0]+random_quote[1][1]+random_quote[1][2]+random_quote[1][3]} $"
+    resp_1 = requests.get(
+    f"http://quotes.toscrape.com/{random_quote[2]}/")
+    soup = BeautifulSoup(resp_1.text, "html.parser")
+    birth_loc = soup.find(class_="author-born-location").get_text()
+    hint2 = f"The author was born in {birth_loc}"
     myLabel3 = Label(root, text=hint2)
     myLabel3.pack()
 
-myButton = Button(root, text="Check", command=info, fg="purple")
-myButton.pack()
+myButton = Button(root, padx=30, pady=20, text="Check", command=info, fg="purple")
+myButton.grid(row=2, column=0)
 
-hintButton = Button(root, text="Hint 1", command=hint0)
-hintButton.pack()
-hintButton1 = Button(root, text="Hint 2", command=hint1)
-hintButton1.pack()
-hintButton2 = Button(root, text="Hint 3", command=hint2)
-hintButton2.pack()
+hintButton = Button(root, padx=30, pady=20, text="Hint 1", command=hint0)
+hintButton.grid(row=2, column=1)
+hintButton1 = Button(root, padx=30, pady=20, text="Hint 2", command=hint1)
+hintButton1.grid(row=2, column=2)
+hintButton2 = Button(root, padx=30, pady=20, text="Hint 3", command=hint2)
+hintButton2.grid(row=2, column=3)
 
 root.mainloop()
 
